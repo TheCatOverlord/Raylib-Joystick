@@ -89,7 +89,22 @@ int main(void)
         {
             case JS_EVENT_AXIS:
             {
-                axis[js.number] = js.value;
+                switch(js.number)
+                {
+                    case 0:
+                    { joystick.leftJoy = (Vector2) { js.value, joystick.leftJoy.y }; } break;
+                    case 1:
+                    { joystick.leftJoy = (Vector2) { joystick.leftJoy.x, js.value }; } break;
+                    case 2:
+                    { joystick.leftAxis = js.value; } break;
+                    case 3:
+                    { joystick.rightJoy = (Vector2) { js.value, joystick.rightJoy.y }; } break;
+                    case 4:
+                    { joystick.rightJoy = (Vector2) { joystick.rightJoy.x, js.value }; } break;
+                    case 5:
+                    { joystick.rightAxis = js.value; } break;
+                }
+                //axis[js.number] = js.value;
             } break;
 
             case JS_EVENT_BUTTON:
@@ -140,9 +155,55 @@ int main(void)
         BeginDrawing();
             ClearBackground(BLACK);
             
-            // make it display something based on inputs
+            // Display the currently pressed button
+            if (joystick.up) { DrawText("UP", (screenWidth / 2) - (MeasureText("UP", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.down) { DrawText("DOWN", (screenWidth / 2) - (MeasureText("DOWN", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.left) { DrawText("LEFT", (screenWidth / 2) - (MeasureText("LEFT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.right) { DrawText("RIGHT", (screenWidth / 2) - (MeasureText("RIGHT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.triangle) { DrawText("TRIANGLE", (screenWidth / 2) - (MeasureText("TRIANGLE", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.circle) { DrawText("CIRCLE", (screenWidth / 2) - (MeasureText("CIRCLE", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.square) { DrawText("SQUARE", (screenWidth / 2) - (MeasureText("SQUARE", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.x) { DrawText("X", (screenWidth / 2) - (MeasureText("X", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.home) { DrawText("HOME", (screenWidth / 2) - (MeasureText("HOME", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.select) { DrawText("SELECT", (screenWidth / 2) - (MeasureText("SELECT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.start) { DrawText("START", (screenWidth / 2) - (MeasureText("START", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.leftTop) { DrawText("TOP LEFT", (screenWidth / 2) - (MeasureText("TOP LEFT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.leftBottom) { DrawText("BOTTOM LEFT", (screenWidth / 2) - (MeasureText("BOTTOM LEFT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.rightTop) { DrawText("TOP RIGHT", (screenWidth / 2) - (MeasureText("TOP RIGHT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.rightBottom) { DrawText("BOTTOM RIGHT", (screenWidth / 2) - (MeasureText("BOTTOM RIGHT", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.leftThumb) { DrawText("LEFT JOYSTICK", (screenWidth / 2) - (MeasureText("LEFT JOYSTICK", 50) / 2) , screenHeight / 2, 50, WHITE); }
+            else if (joystick.rightThumb) { DrawText("RIGHT JOYSTICK", (screenWidth / 2) - (MeasureText("RIGHT JOYSTICK", 50) / 2) , screenHeight / 2, 50, WHITE); }
             
-            
+            if (joystick.rightAxis != -32767.0f) { DrawText(
+                TextFormat("Right Axis: %1.0f", joystick.rightAxis),
+                (screenWidth / 2) - (MeasureText(TextFormat("Right Axis: %1.0f", joystick.rightAxis), 20) / 2),
+                570, 20, RED); }
+
+            if (joystick.leftAxis != -32767.0f) { DrawText(
+                TextFormat("Left Axis: %1.0f", joystick.leftAxis),
+                (screenWidth / 2) - (MeasureText(TextFormat("Left Axis: %1.0f", joystick.leftAxis), 20) / 2),
+                540, 20, RED); }
+
+            if (joystick.leftJoy.x != 0.0f) { DrawText(
+                TextFormat("Left Joystick X Axis: %1.0f", joystick.leftJoy.x),
+                (screenWidth / 2) - (MeasureText(TextFormat("Left Joystick X Axis: %1.0f", joystick.leftJoy.x), 20) / 2),
+                510, 20, RED); }
+
+            if (joystick.leftJoy.y != 0.0f) { DrawText(
+                TextFormat("Left Joystick Y Axis: %1.0f", joystick.leftJoy.y),
+                (screenWidth / 2) - (MeasureText(TextFormat("Left Joystick Y Axis: %1.0f", joystick.leftJoy.y), 20) / 2),
+                480, 20, RED); }
+
+            if (joystick.rightJoy.x != 0.0f) { DrawText(
+                TextFormat("Right Joystick X Axis: %1.0f", joystick.rightJoy.x),
+                (screenWidth / 2) - (MeasureText(TextFormat("Right Joystick X Axis: %1.0f", joystick.rightJoy.x), 20) / 2),
+                450, 20, RED); }
+
+            if (joystick.rightJoy.y != 0.0f) { DrawText(
+                TextFormat("Right Joystick Y Axis: %1.0f", joystick.rightJoy.y),
+                (screenWidth / 2) - (MeasureText(TextFormat("Right Joystick Y Axis: %1.0f", joystick.rightJoy.y), 20) / 2),
+                420, 20, RED); }
+
             DrawFPS(GetScreenWidth() - 100,GetScreenHeight() - 20);
         EndDrawing();
     }
